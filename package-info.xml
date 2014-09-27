@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE package-info SYSTEM "http://www.elkarte.net/site/package-info">
+<package-info xmlns="http://www.elkarte.net/site/package-info" xmlns:elk="http://www.elkarte.net/">
+	<id>Spuds:Emoji</id>
+	<name>Emoji4ElkArte</name>
+	<version>1.0</version>
+	<type>addon</type>
+	<license><![CDATA[
+/**
+ *
+ * @author spuds
+ * @license MPL 1.1 http://mozilla.org/MPL/1.1/
+ *
+ * @version 1.0
+ */
+	]]></license>
+	<install for="1.0 - 1.0.99">
+		<require-file name="Emoji.class.php" destination="SUBSDIR" />
+		<require-file name="Emoji.integration.php" destination="SUBSDIR" />
+		<require-file name="Emoji.plugin.js" destination="THEMEDIR/scripts" />
+		<require-dir name="emoji" destination="SMILEYDIR" />
+		<hook hook="integrate_pre_include" file="SUBSDIR/Emoji.class.php" />
+		<hook hook="integrate_pre_parsebbc" file="SUBSDIR/Emoji.integration.php" function="ipp_emoji" />
+		<hook hook="integrate_bbc_buttons" file="SUBSDIR/Emoji.integration.php" function="ibb_emoji" />
+	</install>
+	<uninstall for="1.0 - 1.0.99">
+		<hook reverse="true" hook="integrate_pre_include" file="SUBSDIR/Emoji.class.php" />
+		<hook reverse="true" hook="integrate_pre_parsebbc" file="SUBSDIR/Emoji.integration.php" function="ipp_emoji" />
+		<hook reverse="true" hook="integrate_bbc_buttons" file="SUBSDIR/Emoji.integration.php" function="ibb_emoji" />
+		<remove-file name="SUBSDIR/Emoji.class.php" />
+		<remove-file name="SUBSDIR/Emoji.integration.php" />
+		<remove-dir name="SMILEYDIR/emoji" />
+		<remove-file name="THEMEDIR/scripts/Emoji.plugin.js" />
+	</uninstall>
+</package-info>
