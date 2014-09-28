@@ -14,7 +14,7 @@
  * @version 1.0
  */
 	]]></license>
-	<install for="1.0 - 1.0.99">
+	<install for="1.0.1 - 1.0.99">
 		<require-file name="Emoji.class.php" destination="SUBSDIR" />
 		<require-file name="Emoji.integration.php" destination="SUBSDIR" />
 		<require-file name="Emoji.plugin.js" destination="THEMEDIR/scripts" />
@@ -23,7 +23,7 @@
 		<hook hook="integrate_pre_parsebbc" file="SUBSDIR/Emoji.integration.php" function="ipp_emoji" />
 		<hook hook="integrate_editor_plugins" file="SUBSDIR/Emoji.integration.php" function="iep_emoji" />
 	</install>
-	<uninstall for="1.0 - 1.0.99">
+	<uninstall for="1.0.1 - 1.0.99">
 		<hook reverse="true" hook="integrate_pre_include" file="SUBSDIR/Emoji.class.php" />
 		<hook reverse="true" hook="integrate_pre_parsebbc" file="SUBSDIR/Emoji.integration.php" function="ipp_emoji" />
 		<hook reverse="true" hook="integrate_editor_plugins" file="SUBSDIR/Emoji.integration.php" function="iep_emoji" />
