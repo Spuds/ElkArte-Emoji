@@ -45,7 +45,10 @@ function iep_emoji($editor_id)
 
 	// Need caret and atwho to be available
 	if (empty($context['mentions_enabled']))
+	{
+		loadCSSFile('jquery.atwho.css');
 		loadJavascriptFile(array('jquery.atwho.js', 'jquery.caret.min.js', 'Emoji.plugin.js'));
+	}
 	else
 		loadJavascriptFile(array('Emoji.plugin.js'));
 
