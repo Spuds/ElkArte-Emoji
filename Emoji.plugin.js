@@ -911,12 +911,6 @@ var disableDrafts = false;
 	elk_Emoji.prototype.attachAtWho = function(oEmoji, $element, oIframeWindow) {
 		var emoji = document.getElementById('emoji');
 
-		// Our div to hold results
-		if (emoji === null)
-			$('#' + oEmoji.opts.editor_id).after(oEmoji.opts._emoji);
-		else
-			oEmoji.opts._emoji = $(emoji);
-
 		// Create the dropdown selection list
 		// Inserts the site image location when one is selected.
 		// Uses the CDN for the pulldown image to reduce site calls
@@ -928,7 +922,7 @@ var disableDrafts = false;
 			delay: 200,
 			limit: 7,
 			tpl:"<li data-value=':${name}:'>${name}<img style='max-width:18px;float:right;' src='http://cdn.jsdelivr.net/emojione/assets/png/${key}.png' /></li>",
-			insert_tpl: "<img data-sceditor-emoticon=':${key}:' alt=':${key}:' title='${name}' src='" + oEmoji.opts.emoji_url + "/${name}.png' />",
+			insert_tpl: "<img style='max-width:18px;padding:0 2px;vertical-align:bottom;' data-sceditor-emoticon=':${name}:' alt=':${key}:' title='${name}' src='" + oEmoji.opts.emoji_url + "/${name}.png' />",
 			callbacks: {
 				filter: function (query, items, search_key) {
 					// Don't show the list until they have entered at least two characters
@@ -1023,7 +1017,7 @@ var disableDrafts = false;
 	 * Private emoji vars
 	 */
 	elk_Emoji.prototype.defaults = {
-		_emoji: $('<div style="display:none" />')
+
 	};
 
 	/**
