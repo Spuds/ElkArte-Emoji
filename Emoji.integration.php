@@ -21,14 +21,15 @@ if (!defined('ELK'))
  * after preparse has run on that section
  * - Parts will be 0 = outside, 1 = begin tag, 2 = inside, 3 = close tag
  *
- * @param string $part
- * @param int $i
- * @param boolean $previewing
+ * @param string $message
+ * @param bool $smileys
+ * @param string $cache_id
+ * @param mixed[] $parse_tags
  */
 function ipp_emoji(&$message, &$smileys, &$cache_id, &$parse_tags)
 {
 	// If we are doing smileys, then we are doing emoji!
-	if ($smileys)
+	if ($smileys && (empty($_REQUEST['sa']) || $_REQUEST['sa'] !== 'install2'))
 		$message = Emoji::emojiNameToImage($message);
 }
 
@@ -38,6 +39,8 @@ function ipp_emoji(&$message, &$smileys, &$cache_id, &$parse_tags)
  * - Used to load in additonal JS for the editor
  * - Add plugins to the editor
  * - Add initilization objects to the editor
+ *
+ * @param string $editor_id
  */
 function iep_emoji($editor_id)
 {
