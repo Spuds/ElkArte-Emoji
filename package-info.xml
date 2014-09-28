@@ -21,12 +21,12 @@
 		<require-dir name="emoji" destination="SMILEYDIR" />
 		<hook hook="integrate_pre_include" file="SUBSDIR/Emoji.class.php" />
 		<hook hook="integrate_pre_parsebbc" file="SUBSDIR/Emoji.integration.php" function="ipp_emoji" />
-		<hook hook="integrate_bbc_buttons" file="SUBSDIR/Emoji.integration.php" function="ibb_emoji" />
+		<hook hook="integrate_editor_plugins" file="SUBSDIR/Emoji.integration.php" function="iep_emoji" />
 	</install>
 	<uninstall for="1.0 - 1.0.99">
 		<hook reverse="true" hook="integrate_pre_include" file="SUBSDIR/Emoji.class.php" />
 		<hook reverse="true" hook="integrate_pre_parsebbc" file="SUBSDIR/Emoji.integration.php" function="ipp_emoji" />
-		<hook reverse="true" hook="integrate_bbc_buttons" file="SUBSDIR/Emoji.integration.php" function="ibb_emoji" />
+		<hook reverse="true" hook="integrate_editor_plugins" file="SUBSDIR/Emoji.integration.php" function="iep_emoji" />
 		<remove-file name="SUBSDIR/Emoji.class.php" />
 		<remove-file name="SUBSDIR/Emoji.integration.php" />
 		<remove-dir name="SMILEYDIR/emoji" />

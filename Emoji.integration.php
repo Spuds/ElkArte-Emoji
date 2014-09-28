@@ -27,22 +27,32 @@ if (!defined('ELK'))
  */
 function ipp_emoji(&$message, &$smileys, &$cache_id, &$parse_tags)
 {
-	global $modSettings;
-
+	// If we are doing smileys, then we are doing emoji!
 	if ($smileys)
-		$message = Emoji::shortnameToImage($message);
+		$message = Emoji::emojiNameToImage($message);
 }
 
 /**
- * integrate_bbc_buttons
+ * integrate_editor_plugins called from Editor.subs.php
+ *
+ * - Used to load in additonal JS for the editor
+ * - Add plugins to the editor
+ * - Add initilization objects to the editor
  */
-function ibb_emoji()
+function iep_emoji($editor_id)
 {
 	global $context;
-			
+
 	// Need caret and atwho to be available
 	if (empty($context['mentions_enabled']))
 		loadJavascriptFile(array('jquery.atwho.js', 'jquery.caret.min.js', 'Emoji.plugin.js'));
 	else
 		loadJavascriptFile(array('Emoji.plugin.js'));
+
+	// Add the emoji plugin to the editor
+	$context['controls']['richedit'][$editor_id]['plugin_addons'][] = 'emoji';
+	$context['controls']['richedit'][$editor_id]['plugin_options'][] = '
+					emojiOptions: {
+						editor_id: \'' . $editor_id . '\'
+					}';
 }

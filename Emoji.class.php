@@ -66,7 +66,7 @@ class Emoji
 		'house' => '', 'house_with_garden' => '', 'hushed' => '', 'ice_cream' => '', 'icecream' => '', 'id' => '', 'ideograph_advantage' => '', 'imp' => '', 'inbox_tray' => '',
 		'incoming_envelope' => '', 'information_desk_person' => '', 'information_source' => '', 'innocent' => '', 'interrobang' => '', 'iphone' => '', 'it' => '', 'izakaya_lantern' => '',
 		'jack_o_lantern' => '', 'japan' => '', 'japanese_castle' => '', 'japanese_goblin' => '', 'japanese_ogre' => '', 'jeans' => '', 'joy' => '', 'joy_cat' => '', 'jp' => '', 'key' => '', 'keycap_ten' => '',
-		'kimono' => '', 'kiss' => '', 'kissing' => '', 'kissing_cat' => '', 'kissing_closed_eyes' => '', 'kissing_heart' => '', 'kissing_smiling_eyes' => '', 'koala' => '', 'koko' => '', 'kr' => '', 'large_blue_circle' => '', 
+		'kimono' => '', 'kiss' => '', 'kissing' => '', 'kissing_cat' => '', 'kissing_closed_eyes' => '', 'kissing_heart' => '', 'kissing_smiling_eyes' => '', 'koala' => '', 'koko' => '', 'kr' => '', 'large_blue_circle' => '',
 		'large_blue_diamond' => '', 'large_orange_diamond' => '', 'last_quarter_moon' => '', 'last_quarter_moon_with_face' => '', 'laughing' => '', 'leaves' => '',
 		'ledger' => '', 'left_luggage' => '', 'left_right_arrow' => '', 'leftwards_arrow_with_hook' => '', 'lemon' => '', 'leo' => '', 'leopard' => '', 'libra' => '', 'light_rail' => '', 'link' => '', 'lips' => '', 'lipstick' => '',
 		'lock' => '', 'lock_with_ink_pen' => '', 'lollipop' => '', 'loop' => '', 'loudspeaker' => '', 'love_hotel' => '', 'love_letter' => '', 'low_brightness' => '', 'm' => '', 'mag' => '', 'mag_right' => '', 'mahjong' => '',
@@ -112,10 +112,11 @@ class Emoji
 
 	/**
 	 * Simple search and replace function
+	 * - Finds emoji tags outside of code tags and converts them to images
 	 *
 	 * @param string $string
 	 */
-	public static function shortnameToImage($string)
+	public static function emojiNameToImage($string)
 	{
 		// Find all emoji tags outside code tags
 		$parts = array();
@@ -128,7 +129,7 @@ class Emoji
 			if ($i % 4 == 0)
 			{
 				// they must be at the start of a line, or have a leading space or be after a bbc ] tag
-				$parts[$i] = preg_replace_callback('~(\s|^|\])(:([-+\w]+):\s?)~si', 'Emoji::_nameToImage_Callback', $parts[$i]);
+				$parts[$i] = preg_replace_callback('~(\s|^|\])(:([-+\w]+):\s?)~si', 'Emoji::_emojiToImage_Callback', $parts[$i]);
 			}
 		}
 
@@ -136,16 +137,16 @@ class Emoji
 	}
 
 	/**
-	 * Callback for pregreplace in shortnameToImage function
+	 * Callback for preg replace in shortnameToImage function
 	 *
 	 * @param array $m results form preg_replace_callback
 	 */
-	private static function _nameToImage_Callback($m)
+	private static function _emojiToImage_Callback($m)
 	{
 		global $modSettings;
 		static $smileys_url = null;
 
-		$smileys_url = empty($smileys_url) ? htmlspecialchars($modSettings['smileys_url']) : $smileys_url;
+		$smileys_url = empty($smileys_url) ? htmlspecialchars($modSettings['smileys_url']) . '/emoji/' : $smileys_url;
 
 		// No :tag: found or not a complete result, return
 		if ((!is_array($m)) || (!isset($m[3])) || (empty($m[3])))
@@ -156,9 +157,9 @@ class Emoji
 			if (!isset(self::$_shortcode_replace[$m[3]]))
 				return $m[0];
 
-			$filename = $smileys_url . '/emoji/' . strtolower($m[3]) . '.png';
+			$filename = $smileys_url . strtolower($m[3]) . '.png';
 
-			return $m[1] . '<img class="smiley" style="max-width: 18px" src="' . $filename . '" alt="' . strtr($m[2], array(':' => '&#58;', '(' => '&#40;', ')' => '&#41;', '$' => '&#36;', '[' => '&#091;')) . '" title="' . strtr(htmlspecialchars($m[3]), array(':' => '&#58;', '(' => '&#40;', ')' => '&#41;', '$' => '&#36;', '[' => '&#091;')) . '" />';
+			return $m[1] . '<img class="smiley" style="max-width:18px;padding:0 2px;" src="' . $filename . '" alt="' . strtr($m[2], array(':' => '&#58;', '(' => '&#40;', ')' => '&#41;', '$' => '&#36;', '[' => '&#091;')) . '" title="' . strtr(htmlspecialchars($m[3]), array(':' => '&#58;', '(' => '&#40;', ')' => '&#41;', '$' => '&#36;', '[' => '&#091;')) . '" />';
 		}
 	}
 }
