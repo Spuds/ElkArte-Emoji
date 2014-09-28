@@ -19,7 +19,7 @@
 		<require-file name="Emoji.integration.php" destination="SUBSDIR" />
 		<require-file name="Emoji.plugin.js" destination="THEMEDIR/scripts" />
 		<require-dir name="emoji" destination="SMILEYDIR" />
-		<hook hook="integrate_pre_include" file="SUBSDIR/Emoji.class.php" />
+		<hook hook="integrate_pre_include" function="SUBSDIR/Emoji.class.php" />
 		<hook hook="integrate_pre_parsebbc" file="SUBSDIR/Emoji.integration.php" function="ipp_emoji" />
 		<hook hook="integrate_editor_plugins" file="SUBSDIR/Emoji.integration.php" function="iep_emoji" />
 	</install>
