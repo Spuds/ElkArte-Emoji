@@ -909,8 +909,6 @@ var disableDrafts = false;
 	 * @param {object} oIframeWindow
 	 */
 	elk_Emoji.prototype.attachAtWho = function(oEmoji, $element, oIframeWindow) {
-		var emoji = document.getElementById('emoji');
-
 		// Create the dropdown selection list
 		// Inserts the site image location when one is selected.
 		// Uses the CDN for the pulldown image to reduce site calls
@@ -932,6 +930,7 @@ var disableDrafts = false;
 						return items;
 				},
 				tpl_eval: function (tpl, map) {
+					// The CDN needs the key in uppercase
 					map.key = map.key.toUpperCase();
 					var error;
 					try {
@@ -968,8 +967,6 @@ var disableDrafts = false;
 
 	/**
 	 * Fetches the HTML from the editor window and updates any emoji :tags: with img tags
-	 *
-	 * @returns {undefined}
 	 */
 	elk_Emoji.prototype.processEmoji = function() {
 		var instance, // sceditor instance
@@ -1016,9 +1013,7 @@ var disableDrafts = false;
 	/**
 	 * Private emoji vars
 	 */
-	elk_Emoji.prototype.defaults = {
-
-	};
+	elk_Emoji.prototype.defaults = {};
 
 	/**
 	 * Holds all current emoji (defaults + passed options)
