@@ -44,7 +44,7 @@ function ipp_emoji(&$message, &$smileys, &$cache_id, &$parse_tags)
  */
 function iep_emoji($editor_id)
 {
-	global $context;
+	global $context, $modSettings;
 
 	// Need caret and atwho to be available
 	if (empty($context['mentions_enabled']))
@@ -59,6 +59,90 @@ function iep_emoji($editor_id)
 	$context['controls']['richedit'][$editor_id]['plugin_addons'][] = 'emoji';
 	$context['controls']['richedit'][$editor_id]['plugin_options'][] = '
 					emojiOptions: {
-						editor_id: \'' . $editor_id . '\'
+						editor_id: \'' . $editor_id . '\',
+						emoji_group: \'' . $modSettings['emoji_selection'] . '\'
 					}';
+}
+
+/**
+ * iaa_emoji()
+ *
+ * - Admin Hook, integrate_admin_areas, called from Admin.php
+ * - Used to add/modify admin menu areas
+ *
+ * @param mixed[] $admin_areas
+ */
+function iaa_emoji(&$admin_areas)
+{
+	global $txt;
+
+	loadlanguage('emoji');
+	$admin_areas['config']['areas']['addonsettings']['subsections']['emoji'] = array($txt['emoji_title']);
+}
+
+/**
+ * imm_emoji()
+ *
+ * - Admin Hook, integrate_sa_modify_modifications, called from AddonSettings.controller.php
+ * - Used to add subactions to the addon area
+ *
+ * @param mixed[] $sub_actions
+ */
+function imm_emoji(&$sub_actions)
+{
+	$sub_actions['emoji'] = array(
+		'dir' => SUBSDIR,
+		'file' => 'Emoji.integration.php',
+		'function' => 'emoji_settings',
+		'permission' => 'admin_forum',
+	);
+}
+
+/**
+ * emoji_settings()
+ *
+ * - Defines our settings array and uses our settings class to manage the data
+ */
+function emoji_settings()
+{
+	global $txt, $context, $scripturl;
+
+	loadlanguage('emoji');
+	$context[$context['admin_menu_name']]['tab_data']['tabs']['emoji']['description'] = $txt['emoji_desc'];
+
+	// Lets build a settings form
+	require_once(SUBSDIR . '/SettingsForm.class.php');
+
+	// Instantiate the form
+	$emojiSettings = new Settings_Form();
+
+	// All the options, well at least some of them!
+	$config_vars = array(
+		array('select', 'emoji_selection', array(
+			'openemoji' => $txt['emoji_open'],
+			'twitter' => $txt['emoji_twitter'],
+		))
+	);
+
+	// Load the settings to the form class
+	$emojiSettings->settings($config_vars);
+
+	// Saving?
+	if (isset($_GET['save']))
+	{
+		checkSession();
+
+		if (empty($_POST['emoji_selection']))
+			$_POST['emoji_selection'] = 'openemoji';
+
+		Settings_Form::save_db($config_vars);
+		redirectexit('action=admin;area=addonsettings;sa=emoji');
+	}
+
+	// Continue on to the settings template
+	$context['settings_title'] = $txt['emoji_title'];
+	$context['page_title'] = $context['settings_title'] = $txt['emoji_settings'];
+	$context['post_url'] = $scripturl . '?action=admin;area=addonsettings;sa=emoji;save';
+
+	Settings_Form::prepare_db($config_vars);
 }
