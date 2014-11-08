@@ -914,12 +914,23 @@ var disableDrafts = false;
 		// Uses the CDN for the pulldown image to reduce site calls
 		// If you decide to use the github gemoji images then
 		// change tpl to src='https://assets-cdn.github.com/images/icons/emoji/${key}.png'
+		// For the new twitter open source ones
+		// change tpl to src='https://twemoji.maxcdn.com/72x72/${key}.png'
+		var tpl;
+
+		if (oEmoji.opts.emoji_group === 'twitter')
+			tpl = "https://twemoji.maxcdn.com/72x72/${key}.png";
+		else if (oEmoji.opts.emoji_group === 'github')
+			tpl = "https://assets-cdn.github.com/images/icons/emoji/${key}.png";
+		else
+			tpl = "http://cdn.jsdelivr.net/emojione/assets/png/${key}.png";
+
 		$element.atwho({
 			at: ":",
 			data: emojies,
 			delay: 200,
 			limit: 7,
-			tpl:"<li data-value=':${name}:'>${name}<img style='max-width:18px;float:right;' src='http://cdn.jsdelivr.net/emojione/assets/png/${key}.png' /></li>",
+			tpl:"<li data-value=':${name}:'>${name}<img style='max-width:18px;float:right;' src='" + tpl + "' /></li>",
 			insert_tpl: "<img style='max-width:18px;padding:0 2px;vertical-align:bottom;' data-sceditor-emoticon=':${name}:' alt=':${key}:' title='${name}' src='" + oEmoji.opts.emoji_url + "/${name}.png' />",
 			callbacks: {
 				filter: function (query, items, search_key) {
@@ -930,8 +941,9 @@ var disableDrafts = false;
 						return items;
 				},
 				tpl_eval: function (tpl, map) {
-					// The CDN needs the key in uppercase
-					map.key = map.key.toUpperCase();
+					// The jsdeliver CDN (open emoji) needs the key in uppercase
+					if (oEmoji.opts.emoji_group !== 'twitter')
+						map.key = map.key.toUpperCase();
 					var error;
 					try {
 						return tpl.replace(/\$\{([^\}]*)\}/g, function(tag, key, pos) {

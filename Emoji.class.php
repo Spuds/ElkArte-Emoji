@@ -128,7 +128,7 @@ class Emoji
 			// It goes 0 = outside, 1 = begin tag, 2 = inside, 3 = close tag, repeat.
 			if ($i % 4 == 0)
 			{
-				// they must be at the start of a line, or have a leading space or be after a bbc ] tag
+				// They must be at the start of a line, or have a leading space or be after a bbc ] tag
 				$parts[$i] = preg_replace_callback('~(\s|^|\])(:([-+\w]+):\s?)~si', 'Emoji::_emojiToImage_Callback', $parts[$i]);
 			}
 		}
@@ -146,7 +146,7 @@ class Emoji
 		global $modSettings;
 		static $smileys_url = null;
 
-		$smileys_url = empty($smileys_url) ? htmlspecialchars($modSettings['smileys_url']) . '/emoji/' : $smileys_url;
+		$smileys_url = empty($smileys_url) ? htmlspecialchars($modSettings['smileys_url']) . ($modSettings['emoji_selection'] === 'twitter' ? '/tw_emoji/' : '/emoji/') : $smileys_url;
 
 		// No :tag: found or not a complete result, return
 		if ((!is_array($m)) || (!isset($m[3])) || (empty($m[3])))
