@@ -8,7 +8,7 @@
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
  *
- * @version 1.0
+ * @version 1.0.1
  */
 
 if (!defined('ELK'))
@@ -29,16 +29,16 @@ if (!defined('ELK'))
 function ipp_emoji(&$message, &$smileys, &$cache_id, &$parse_tags)
 {
 	// If we are doing smileys, then we are doing emoji!
-	if ($smileys && (empty($_REQUEST['sa']) || $_REQUEST['sa'] !== 'install2'))
+	if ($smileys && (empty($_REQUEST['sa']) || $_REQUEST['sa'] !== 'install2') && $message !== false)
 		$message = Emoji::emojiNameToImage($message);
 }
 
 /**
  * integrate_editor_plugins called from Editor.subs.php
  *
- * - Used to load in additonal JS for the editor
+ * - Used to load in additional JS for the editor
  * - Add plugins to the editor
- * - Add initilization objects to the editor
+ * - Add initialization objects to the editor
  *
  * @param string $editor_id
  */
