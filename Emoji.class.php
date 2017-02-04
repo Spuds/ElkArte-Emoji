@@ -20,7 +20,7 @@ if (!defined('ELK'))
  * Used to add emoji images to text
  *
  * What it does:
- * - Searchs text for :tag: strings
+ * - Searches text for :tag: strings
  * - If tag is found to be a know emoji, replaces it with an image tag
  */
 class Emoji
@@ -112,9 +112,11 @@ class Emoji
 
 	/**
 	 * Simple search and replace function
+	 *
 	 * - Finds emoji tags outside of code tags and converts them to images
 	 *
 	 * @param string $string
+	 * @return string
 	 */
 	public static function emojiNameToImage($string)
 	{
@@ -140,6 +142,7 @@ class Emoji
 	 * Callback for preg replace in shortnameToImage function
 	 *
 	 * @param array $m results form preg_replace_callback
+	 * @return string
 	 */
 	private static function _emojiToImage_Callback($m)
 	{
