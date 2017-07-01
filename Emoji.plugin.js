@@ -173,7 +173,7 @@ var disableDrafts = false;
 		{name: 'circus_tent', key: '1f3aa'},
 		{name: 'city_dusk', key: '1f306'},
 		{name: 'city_sunrise', key: '1f307'},
-		{name: 'city_sunset', key: '1f307'},
+		{name: 'city_sunset', key: '1f306'},
 		{name: 'cl', key: '1f191'},
 		{name: 'clap', key: '1f44f'},
 		{name: 'clapper', key: '1f3ac'},
@@ -914,8 +914,6 @@ var disableDrafts = false;
 		// Uses the CDN for the pulldown image to reduce site calls
 		// If you decide to use the github gemoji images then
 		// change tpl to src='https://assets-cdn.github.com/images/icons/emoji/${key}.png'
-		// For the new twitter open source ones
-		// change tpl to src='https://twemoji.maxcdn.com/72x72/${key}.png'
 		var tpl;
 
 		if (oEmoji.opts.emoji_group === 'twitter')

@@ -12,7 +12,9 @@
  */
 
 if (!defined('ELK'))
+{
 	die('No access...');
+}
 
 /**
  * integrate_preparse_code, called from Post.subs
@@ -30,7 +32,9 @@ function ipp_emoji(&$message, &$smileys, &$cache_id, &$parse_tags)
 {
 	// If we are doing smileys, then we are doing emoji!
 	if ($smileys && (empty($_REQUEST['sa']) || $_REQUEST['sa'] !== 'install2') && $message !== false)
+	{
 		$message = Emoji::emojiNameToImage($message);
+	}
 }
 
 /**
@@ -53,7 +57,9 @@ function iep_emoji($editor_id)
 		loadJavascriptFile(array('jquery.atwho.js', 'jquery.caret.min.js', 'Emoji.plugin.js'));
 	}
 	else
+	{
 		loadJavascriptFile(array('Emoji.plugin.js'));
+	}
 
 	// Add the emoji plugin to the editor
 	$context['controls']['richedit'][$editor_id]['plugin_addons'][] = 'emoji';
@@ -133,7 +139,9 @@ function emoji_settings()
 		checkSession();
 
 		if (empty($_POST['emoji_selection']))
+		{
 			$_POST['emoji_selection'] = 'openemoji';
+		}
 
 		Settings_Form::save_db($config_vars);
 		redirectexit('action=admin;area=addonsettings;sa=emoji');

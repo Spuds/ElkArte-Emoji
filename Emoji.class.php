@@ -10,18 +10,21 @@
  *
  * Used to search text for ascii :emoji: codes and replace with an image tag
  *
- * @version 1.0
+ * @version 1.0.1
  */
 
 if (!defined('ELK'))
+{
 	die('No access...');
+}
 
 /**
  * Used to add emoji images to text
  *
  * What it does:
+ *
  * - Searches text for :tag: strings
- * - If tag is found to be a know emoji, replaces it with an image tag
+ * - If tag is found to be a known emoji, replaces it with an image tag
  */
 class Emoji
 {
@@ -41,7 +44,7 @@ class Emoji
 		'bust_in_silhouette' => '', 'busts_in_silhouette' => '', 'cactus' => '', 'cake' => '', 'calendar' => '', 'calling' => '', 'camel' => '', 'camera' => '', 'cancer' => '', 'candy' => '', 'capital_abcd' => '', 'capricorn' => '',
 		'card_index' => '', 'carousel_horse' => '', 'cat' => '', 'cat2' => '', 'cd' => '', 'chart' => '', 'chart_with_downwards_trend' => '', 'chart_with_upwards_trend' => '', 'checkered_flag' => '',
 		'cherries' => '', 'cherry_blossom' => '', 'chestnut' => '', 'chicken' => '', 'children_crossing' => '', 'chocolate_bar' => '', 'christmas_tree' => '', 'church' => '', 'cinema' => '', 'circus_tent' => '',
-		'city_sunset' => '', 'cl' => '', 'clap' => '', 'clapper' => '', 'clipboard' => '', 'clock1' => '', 'clock10' => '', 'clock1030' => '', 'clock11' => '', 'clock1130' => '', 'clock12' => '',
+		'city_sunset' => '', 'city_sunrise' => '', 'cl' => '', 'clap' => '', 'clapper' => '', 'clipboard' => '', 'clock1' => '', 'clock10' => '', 'clock1030' => '', 'clock11' => '', 'clock1130' => '', 'clock12' => '',
 		'clock1230' => '', 'clock130' => '', 'clock2' => '', 'clock230' => '', 'clock3' => '', 'clock330' => '', 'clock4' => '', 'clock430' => '', 'clock5' => '', 'clock530' => '', 'clock6' => '', 'clock630' => '', 'clock7' => '',
 		'clock730' => '', 'clock8' => '', 'clock830' => '', 'clock9' => '', 'clock930' => '', 'closed_book' => '', 'closed_lock_with_key' => '', 'closed_umbrella' => '', 'cloud' => '', 'clubs' => '', 'cn' => '',
 		'cocktail' => '', 'coffee' => '', 'cold_sweat' => '', 'computer' => '', 'confetti_ball' => '', 'confounded' => '', 'confused' => '', 'congratulations' => '', 'construction' => '',
@@ -113,6 +116,8 @@ class Emoji
 	/**
 	 * Simple search and replace function
 	 *
+	 * What it does:
+	 *
 	 * - Finds emoji tags outside of code tags and converts them to images
 	 *
 	 * @param string $string
@@ -121,7 +126,6 @@ class Emoji
 	public static function emojiNameToImage($string)
 	{
 		// Find all emoji tags outside code tags
-		$parts = array();
 		$parts = preg_split('~(\[/code\]|\[code(?:=[^\]]+)?\])~i', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
 
 		// Only converts :tags: outside.
@@ -130,8 +134,9 @@ class Emoji
 			// It goes 0 = outside, 1 = begin tag, 2 = inside, 3 = close tag, repeat.
 			if ($i % 4 == 0)
 			{
+			//	echo '<xmp>' . $parts[$i] . '</xmp>';
 				// They must be at the start of a line, or have a leading space or be after a bbc ] tag
-				$parts[$i] = preg_replace_callback('~(\s|^|\])(:([-+\w]+):\s?)~si', 'Emoji::_emojiToImage_Callback', $parts[$i]);
+				$parts[$i] = preg_replace_callback('~(\s?|^|\]|<br \/>)(:([-+\w]+):\s?)~si', 'Emoji::_emojiToImage_Callback', $parts[$i]);
 			}
 		}
 
@@ -153,12 +158,16 @@ class Emoji
 
 		// No :tag: found or not a complete result, return
 		if ((!is_array($m)) || (!isset($m[3])) || (empty($m[3])))
+		{
 			return $m[0];
+		}
 		else
 		{
 			// If its not a known tag, just return
 			if (!isset(self::$_shortcode_replace[$m[3]]))
+			{
 				return $m[0];
+			}
 
 			$filename = $smileys_url . strtolower($m[3]) . '.png';
 
