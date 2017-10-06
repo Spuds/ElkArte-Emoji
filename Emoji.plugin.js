@@ -1,7 +1,7 @@
-/**
+/*!
  * @package Emoji for ElkArte
  * @author Spuds
- * @copyright (c) 2011-2014 Spuds
+ * @copyright (c) 2011-2017 Spuds
  * @license This Source Code is subject to the terms of the Mozilla Public License
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
@@ -9,7 +9,7 @@
  * This handles the population of the emoji selection drop down and the rendering of
  * emoji when toggling from source to wizzy
  *
- * @version 1.0
+ * @version 1.0.2
  *
  */
 
@@ -927,7 +927,7 @@ var disableDrafts = false;
 			at: ":",
 			data: emojies,
 			delay: 200,
-			limit: 7,
+			limit: 8,
 			tpl:"<li data-value=':${name}:'>${name}<img style='max-width:18px;float:right;' src='" + tpl + "' /></li>",
 			insert_tpl: "<img style='max-width:18px;padding:0 2px;vertical-align:bottom;' data-sceditor-emoticon=':${name}:' alt=':${key}:' title='${name}' src='" + oEmoji.opts.emoji_url + "/${name}.png' />",
 			callbacks: {
@@ -942,13 +942,13 @@ var disableDrafts = false;
 					// The jsdeliver CDN (open emoji) needs the key in uppercase
 					if (oEmoji.opts.emoji_group !== 'twitter')
 						map.key = map.key.toUpperCase();
-					var error;
 					try {
 						return tpl.replace(/\$\{([^\}]*)\}/g, function(tag, key, pos) {
 							return map[key];
 						});
 					} catch (_error) {
-						error = _error;
+						if ('console' in window)
+							window.console.info(_error);
 						return "";
 					}
 				}
@@ -984,9 +984,9 @@ var disableDrafts = false;
 			emoji_url = elk_smileys_url.replace("default", "emoji"), // where the emoji images are
 			emoji_regex = new RegExp("(:([-+\\w]+):)", "gi"), // find emoji
 			code_regex = new RegExp("(</code>|<code(?:[^>]+)?>)", "gi"), // split around code tags
-			str_split = [],
-			i = 0,
-			n = 0;
+			str_split,
+			i,
+			n;
 
 		// Get the editors instance and html code from the window
 		instance = $('#' + post_box_name).sceditor('instance');
@@ -996,8 +996,8 @@ var disableDrafts = false;
 		str_split = str.split(code_regex);
 		n = str_split.length;
 
-		// Process the stirngs
-		for (var i = 0; i < n; i++)
+		// Process the strings
+		for (i = 0; i < n; i++)
 		{
 			// Only look for emoji outside the code tags
 			if (i % 4 === 0)
