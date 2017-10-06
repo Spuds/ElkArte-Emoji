@@ -3,7 +3,7 @@
 <package-info xmlns="http://www.elkarte.net/site/package-info" xmlns:elk="http://www.elkarte.net/">
 	<id>Spuds:Emoji</id>
 	<name>Emoji4ElkArte</name>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<type>addon</type>
 	<license><![CDATA[
 /**
@@ -11,7 +11,7 @@
  * @author spuds
  * @license MPL 1.1 http://mozilla.org/MPL/1.1/
  *
- * @version 1.0.1
+ * @version 1.0.2
  */
 	]]></license>
 	<install for="1.0.1 - 1.0.99">
@@ -39,6 +39,34 @@
 		<remove-dir name="SMILEYDIR/emoji" />
 		<remove-dir name="SMILEYDIR/tw_emoji" />
 		<remove-file name="THEMEDIR/scripts/Emoji.plugin.js" />
+		<remove-file name="LANGUAGEDIR/english/emoji.english.php" />
+	</uninstall>
+
+	<install for="1.1.RC2 - 1.1.99">
+		<require-file name="Emoji.class.php" destination="SUBSDIR" />
+		<require-file name="Emoji.integration.php" destination="SUBSDIR" />
+		<require-file name="Emoji11.plugin.js" destination="THEMEDIR/scripts" />
+		<require-dir name="emoji" destination="SMILEYDIR" />
+		<require-dir name="tw_emoji" destination="SMILEYDIR" />
+		<require-file name="emoji.english.php" destination="LANGUAGEDIR/english" />
+		<hook hook="integrate_pre_include" function="SUBSDIR/Emoji.class.php" />
+		<hook hook="integrate_pre_bbc_parser" file="SUBSDIR/Emoji.integration.php" function="ipbp_emoji" />
+		<hook hook="integrate_editor_plugins" file="SUBSDIR/Emoji.integration.php" function="iep_emoji" />
+		<hook hook="integrate_sa_modify_modifications" file="SUBSDIR/Emoji.integration.php" function="imm_emoji" />
+		<hook hook="integrate_admin_areas" file="SUBSDIR/Emoji.integration.php" function="iaa_emoji" />
+		<redirect url="?action=admin;area=addonsettings;sa=emoji" timeout="5000">redirect.txt</redirect>
+	</install>
+	<uninstall for="1.1.RC2 - 1.1.99">
+		<hook reverse="true" hook="integrate_pre_include" file="SUBSDIR/Emoji.class.php" />
+		<hook reverse="true" hook="integrate_pre_bbc_parser" file="SUBSDIR/Emoji.integration.php" function="ipbp_emoji" />
+		<hook reverse="true" hook="integrate_editor_plugins" file="SUBSDIR/Emoji.integration.php" function="iep_emoji" />
+		<hook reverse="true" hook="integrate_sa_modify_modifications" file="SUBSDIR/Emoji.integration.php" function="imm_emoji" />
+		<hook reverse="true" hook="integrate_admin_areas" file="SUBSDIR/Emoji.integration.php" function="iaa_emoji" />
+		<remove-file name="SUBSDIR/Emoji.class.php" />
+		<remove-file name="SUBSDIR/Emoji.integration.php" />
+		<remove-dir name="SMILEYDIR/emoji" />
+		<remove-dir name="SMILEYDIR/tw_emoji" />
+		<remove-file name="THEMEDIR/scripts/Emoji11.plugin.js" />
 		<remove-file name="LANGUAGEDIR/english/emoji.english.php" />
 	</uninstall>
 </package-info>
