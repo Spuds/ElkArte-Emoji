@@ -3,7 +3,7 @@
 /**
  * @package Emoji for ElkArte
  * @author Spuds
- * @copyright (c) 2011-2014 Spuds
+ * @copyright (c) 2011-2017 Spuds
  * @license This Source Code is subject to the terms of the Mozilla Public License
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
@@ -134,7 +134,6 @@ class Emoji
 			// It goes 0 = outside, 1 = begin tag, 2 = inside, 3 = close tag, repeat.
 			if ($i % 4 == 0)
 			{
-			//	echo '<xmp>' . $parts[$i] . '</xmp>';
 				// They must be at the start of a line, or have a leading space or be after a bbc ] tag
 				$parts[$i] = preg_replace_callback('~(\s?|^|\]|<br \/>)(:([-+\w]+):\s?)~si', 'Emoji::_emojiToImage_Callback', $parts[$i]);
 			}
