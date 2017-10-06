@@ -3,12 +3,12 @@
 /**
  * @package Emoji for ElkArte
  * @author Spuds
- * @copyright (c) 2011-2014 Spuds
+ * @copyright (c) 2011-2017 Spuds
  * @license This Source Code is subject to the terms of the Mozilla Public License
  * version 1.1 (the "License"). You can obtain a copy of the License at
  * http://mozilla.org/MPL/1.1/.
  *
- * @version 1.0.1
+ * @version 1.0.2
  */
 
 if (!defined('ELK'))
@@ -17,11 +17,10 @@ if (!defined('ELK'))
 }
 
 /**
- * integrate_preparse_code, called from Post.subs
+ * integrate_pre_parsebbc, called from Post.subs
  *
- * - Allows access to the preparse code function on each section of the message
- * after preparse has run on that section
- * - Parts will be 0 = outside, 1 = begin tag, 2 = inside, 3 = close tag
+ * - Allow addons access before entering the main parse_bbc loop
+ * - searches message for emoji :smile: tags and converts to image
  *
  * @param string $message
  * @param bool $smileys
@@ -32,6 +31,24 @@ function ipp_emoji(&$message, &$smileys, &$cache_id, &$parse_tags)
 {
 	// If we are doing smileys, then we are doing emoji!
 	if ($smileys && (empty($_REQUEST['sa']) || $_REQUEST['sa'] !== 'install2') && $message !== false)
+	{
+		$message = Emoji::emojiNameToImage($message);
+	}
+}
+
+/**
+ * integrate_pre_bbc_parser, called from BBCParser (ElkArte 1.1+)
+ *
+ * - Allow addons access before entering the main parse_bbc loop
+ * - searches message for emoji :smile: tags and converts to image
+ *
+ * @param string $message
+ * @param mixed[] $parse_tags
+ */
+function ipbp_emoji(&$message, &$parse_tags)
+{
+	// If we are doing smileys, then we are doing emoji!
+	if ((empty($_REQUEST['sa']) || $_REQUEST['sa'] !== 'install2') && $message !== false)
 	{
 		$message = Emoji::emojiNameToImage($message);
 	}
@@ -50,15 +67,31 @@ function iep_emoji($editor_id)
 {
 	global $context, $modSettings;
 
+	$the_version = substr(strtr(FORUM_VERSION, array('ElkArte ' => ''), 0, 3));
+
 	// Need caret and atwho to be available
 	if (empty($context['mentions_enabled']))
 	{
 		loadCSSFile('jquery.atwho.css');
-		loadJavascriptFile(array('jquery.atwho.js', 'jquery.caret.min.js', 'Emoji.plugin.js'));
+		if ($the_version === '1.0')
+		{
+			loadJavascriptFile(array('jquery.atwho.js', 'jquery.caret.min.js', 'Emoji.plugin.js'));
+		}
+		else
+		{
+			loadJavascriptFile(array('jquery.atwho.min.js', 'jquery.caret.min.js', 'Emoji11.plugin.js'));
+		}
 	}
 	else
 	{
-		loadJavascriptFile(array('Emoji.plugin.js'));
+		if ($the_version === '1.0')
+		{
+			loadJavascriptFile(array('Emoji.plugin.js'));
+		}
+		else
+		{
+			loadJavascriptFile(array('Emoji11.plugin.js'));
+		}
 	}
 
 	// Add the emoji plugin to the editor
@@ -66,7 +99,7 @@ function iep_emoji($editor_id)
 	$context['controls']['richedit'][$editor_id]['plugin_options'][] = '
 					emojiOptions: {
 						editor_id: \'' . $editor_id . '\',
-						emoji_group: \'' . $modSettings['emoji_selection'] . '\'
+						emoji_group: \'' . (empty($modSettings['emoji_selection']) ? 'openemoji' : $modSettings['emoji_selection']) . '\'
 					}';
 }
 
