@@ -67,7 +67,7 @@ function iep_emoji($editor_id)
 {
 	global $context, $modSettings;
 
-	$the_version = substr(strtr(FORUM_VERSION, array('ElkArte ' => ''), 0, 3));
+	$the_version = substr(strtr(FORUM_VERSION, array('ElkArte ' => '')), 0, 3);
 
 	// Need caret and atwho to be available
 	if (empty($context['mentions_enabled']))
