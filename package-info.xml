@@ -42,7 +42,7 @@
 		<remove-file name="LANGUAGEDIR/english/emoji.english.php" />
 	</uninstall>
 
-	<install for="1.1.RC2 - 1.1.99">
+	<install for="1.1 - 1.1.99">
 		<require-file name="Emoji.class.php" destination="SUBSDIR" />
 		<require-file name="Emoji.integration.php" destination="SUBSDIR" />
 		<require-file name="Emoji11.plugin.js" destination="THEMEDIR/scripts" />
@@ -56,7 +56,7 @@
 		<hook hook="integrate_admin_areas" file="SUBSDIR/Emoji.integration.php" function="iaa_emoji" />
 		<redirect url="?action=admin;area=addonsettings;sa=emoji" timeout="5000">redirect.txt</redirect>
 	</install>
-	<uninstall for="1.1.RC2 - 1.1.99">
+	<uninstall for="1.1 - 1.1.99">
 		<hook reverse="true" hook="integrate_pre_include" file="SUBSDIR/Emoji.class.php" />
 		<hook reverse="true" hook="integrate_pre_bbc_parser" file="SUBSDIR/Emoji.integration.php" function="ipbp_emoji" />
 		<hook reverse="true" hook="integrate_editor_plugins" file="SUBSDIR/Emoji.integration.php" function="iep_emoji" />
